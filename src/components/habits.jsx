@@ -1,44 +1,43 @@
 import React, { Component } from 'react';
 import Habit from './habit';
+import HabitForm from './habitForm';
 
 class Habits extends Component {
 
     handleIncrement = (habit) => {
-        const habits = [...this.props.habits];
-        const index = habits.indexOf(habit);
-        habits[index].count++;
-        this.setState({ habits });
+        this.props.onIncrement(habit);
     };
 
     handleDecrement = (habit) => {
-        const habits = [...this.props.habits];
-        const index = habits.indexOf(habit);
-        const count = habits[index].count - 1;
-        habits[index].count = count < 0 ? 0 : count;
-        this.setState({ habits });
+        this.props.onDecrement(habit)
 
     };
 
     handleDelete = (habit) => {
-        const habits = this.props.habits.filter((item) => {
-            return item.id !== habit.id
-        })
-        this.setState({ habits })
+        this.props.onDelete(habit)
     };
+
+    handleAdd = name => {
+        this.props.onAdd(name);
+    }
 
     render() {
         return (
-            <ul>
-                {this.props.habits.map(habit => (
-                    <Habit 
-                        key={habit.id} 
-                        habit={habit} 
-                        onIncrement={this.handleIncrement}
-                        onDecrement={this.handleDecrement}
-                        onDelete={this.handleDelete}
-                    />
-                ))}
-            </ul>
+            <>
+                <HabitForm onAdd={this.handleAdd}/>
+                <ul>
+                    {this.props.habits.map(habit => (
+                        <Habit 
+                            key={habit.id} 
+                            habit={habit} 
+                            onIncrement={this.handleIncrement}
+                            onDecrement={this.handleDecrement}
+                            onDelete={this.handleDelete}
+                        />
+                    ))}
+                </ul>
+            </>
+            
         );
     }
 }
